@@ -3,38 +3,14 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-	.service( 'userInfo', [ '$rootScope', '$location', function( $rootScope, $location ) {
-
-		return {
-
-      // Check user is logged in.
-			verifyLogin: function(init) {
-        if($.cookie("fuelcid")) {
-          return true;
-        } else {
-          if(!init) {
-            $location.path('/login').replace();
-          }
-          return false;
-        }
-			},
-
-      // Return user cookie.
-      checkCookie: function() {
-        return $.cookie("fuelcid");
-      }
-
-		}
-
-	}])
-	.controller('activate', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+	.controller('activate', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
 
     $('.home').hide();
     $('.logout').hide();
     $('.login').show();
 
   }])
-  .controller('password', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+  .controller('password', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
     
     $scope.setupPassword = function() {
       console.log('setup password');
@@ -81,31 +57,10 @@ angular.module('myApp.controllers', [])
       }
     };
 
-
-
-    if(!userInfo.verifyLogin(true)) {
-      $scope.setupPassword();
-    } else {
-      $location.path('/dashboard').replace();
-    }
-
-    // If logged in, redirect to dashboard
-    /*$scope.checkLogin = function() {
-      console.log('check login');
-      var token = $.cookie("fuelcid");
-      if(token) {
-        $location.path('/dashboard').replace();
-      } else {
-        // Setup jquery validate
-        $scope.setupPassword();
-      }
-    };
-
-    // Verify login
-    $scope.checkLogin();*/
+    $scope.setupPassword();
 
   }])
-  .controller('advertise', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+  .controller('advertise', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
 
     $scope.setupAdvertise = function() {
       $('.home').show();
@@ -170,12 +125,10 @@ angular.module('myApp.controllers', [])
       }
     };
 
-    if(userInfo.verifyLogin()) {
-      $scope.setupAdvertise();
-    }
+    $scope.setupAdvertise();
 
   }])
-  .controller('category', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+  .controller('category', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
 
     $scope.setupCategory = function() {
       $('.home').show();
@@ -183,12 +136,10 @@ angular.module('myApp.controllers', [])
       $('.login').hide();
     };
 
-    if(userInfo.verifyLogin()) {
-      $scope.setupCategory();
-    }
+    $scope.setupCategory();
 
   }])
-  .controller('help', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+  .controller('help', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
 
     $scope.setupHelp = function(showBtns) {
       if(showBtns) {
@@ -202,12 +153,10 @@ angular.module('myApp.controllers', [])
       }
     };
 
-    if(userInfo.verifyLogin()) {
-      $scope.setupHelp();
-    }
+    $scope.setupHelp();
 
   }])
-  .controller('points', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+  .controller('points', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
 
     $scope.setupPoints = function() {
       $('.home').show();
@@ -215,12 +164,10 @@ angular.module('myApp.controllers', [])
       $('.login').hide();
     };
 
-    if(userInfo.verifyLogin()) {
-      $scope.setupPoints();
-    }
+    $scope.setupPoints();
 
   }])
-  .controller('revenue', [ '$rootScope', '$scope', '$http', '$location', '$timeout', 'userInfo', function( $rootScope, $scope, $http, $location, $timeout, userInfo) {
+  .controller('revenue', [ '$rootScope', '$scope', '$http', '$location', '$timeout', function( $rootScope, $scope, $http, $location, $timeout) {
 
     $scope.setupRevenue = function() {
       $('.home').show();
@@ -228,15 +175,14 @@ angular.module('myApp.controllers', [])
       $('.login').hide();
     };
 
-    if(userInfo.verifyLogin()) {
-      $scope.setupRevenue();
-    }
+    $scope.setupRevenue();
 
   }])
-	.controller('global', [ '$rootScope', '$scope', '$http', '$location', 'userInfo', function( $rootScope, $scope, $http, $location, userInfo) {
+	.controller('global', [ '$rootScope', '$scope', '$http', '$location', function( $rootScope, $scope, $http, $location) {
 
     $scope.logOut = function() {
       $.removeCookie('fuelcid', { path: '/' });
+      localStorage.removeItem('token');
       $('.logout').hide();
       $('.home').hide();
       $('.login').hide();
@@ -248,7 +194,7 @@ angular.module('myApp.controllers', [])
     }
 
 	}])
-	.controller('dashboard', [ '$rootScope', '$scope', '$http', '$location', 'userInfo', function ($rootScope, $scope, $http, $location, userInfo) {
+	.controller('dashboard', [ '$rootScope', '$scope', '$http', '$location', function ($rootScope, $scope, $http, $location) {
 
     $scope.setupDashboard = function() {
       $('.msg').remove();
@@ -257,16 +203,12 @@ angular.module('myApp.controllers', [])
       $('.login').hide();
     };
 
-		// Verify login
-		if(userInfo.verifyLogin()) {
-      $scope.setupDashboard();
-    }
+    $scope.setupDashboard();
 
   }])
-  .controller('login', [ '$rootScope', '$scope', '$http', '$location', 'userInfo', function($rootScope, $scope, $http, $location, userInfo) {
+  .controller('login', [ '$rootScope', '$scope', '$http', '$location', function($rootScope, $scope, $http, $location) {
 
   $scope.setupLogin = function() {
-    console.log('setuplogin');
     $('.msg').remove();
     $('.home').hide();
     $('.logout').hide();
@@ -362,6 +304,7 @@ angular.module('myApp.controllers', [])
         data: JSON.stringify(usrObj),
         success: function(d) {
           if(d.success == true) {
+            localStorage.setItem('token',12345);
             $location.path('/dashboard').replace();
             $scope.$apply();
           } else {
@@ -469,10 +412,6 @@ angular.module('myApp.controllers', [])
     //$scope.$apply();
   };
 
-  if(userInfo.verifyLogin(true)) {
-    $location.path('/dashboard').replace();
-  } else {
-    $scope.setupLogin();
-  }
+  $scope.setupLogin();
 
 }]);
